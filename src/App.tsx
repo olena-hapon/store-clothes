@@ -2,10 +2,10 @@ import React from 'react';
 import './App.scss';
 // import * as ReactDOM from "react-dom";
 import {
-  createBrowserRouter,
   RouterProvider,
   // Route,
   Outlet,
+  createHashRouter,
 } from "react-router-dom";
 import Home from './pages/Home/Home';
 import Header from './components/Header/Header'
@@ -27,7 +27,7 @@ const Layout = () => {
   )
 }
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Layout />,
