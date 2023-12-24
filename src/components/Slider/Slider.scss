@@ -1,0 +1,32 @@
+.slider {
+  width: 100%;
+  height: 700px;
+ 
+  &__container {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__swiper {
+    height: 100%;
+  }
+
+  &__images-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &__img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+}
+
