@@ -1,5 +1,6 @@
 import React from 'react';
 import './Slider.scss';
+import banner from "../../images/Slider/black-midi-dress-varis-03.png";
 
 const Slider = () => {
   return (
@@ -9,7 +10,7 @@ const Slider = () => {
           <div className="slider__images-container">
             <div className="slider__img">
               <img
-                src="/images/Slider/NEW-recommended-desktop-gifts-lds-podstrona-872x491px-151223.jpg"
+                src={banner}
                 alt=""
                 className='image'
               />

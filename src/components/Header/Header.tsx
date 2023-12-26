@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './Header.scss';
 import { Link, NavLink } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import classNames from 'classnames';
 import Search from '../Search/Search';
+import help from '../../images/help-circle.svg';
+import favorites from '../../images/favorites.svg';
+import account from '../../images/outline-account.svg';
+import cart from '../../images/outline-cart.svg';
 
 const Header = () => {
   const { data } = useFetch("/categories");
@@ -17,7 +21,7 @@ const Header = () => {
             <div className="header__help">
               <Link className='header__link' to='/'>
                 <img
-                  src="/images/help-circle.svg"
+                  src={help}
                   className='icon'
                   alt="header-help"
                 />
@@ -35,7 +39,7 @@ const Header = () => {
             <div className="header__top__right">
             <Link className='header__link' to='/'>
                 <img
-                  src="/images/favorites.svg"
+                  src={favorites}
                   className='icon'
                   alt="header-help"
                 />
@@ -44,7 +48,7 @@ const Header = () => {
 
               <Link className='header__link' to='/'>
                 <img
-                  src="/images/outline-account.svg"
+                  src={account}
                   className='icon'
                   alt="header-help"
                 />
@@ -52,7 +56,7 @@ const Header = () => {
               </Link>
               <Link className='header__link' to='/'>
                 <img
-                  src="/images/outline-cart.svg"
+                  src={cart}
                   className='icon'
                   alt="header-help"
                 />

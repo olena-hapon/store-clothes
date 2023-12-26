@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import './Search.scss';
+import cross from '../../images/Cross.svg';
+import search from '../../images/Search.svg';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -16,14 +18,14 @@ const Search = () => {
     <div className='search'>
       {searchValue ? (
         <img
-          src="/images/Cross.svg"
+          src={cross}
           alt=""
           className='search__img'
           onClick={onClearSearch}
         />
         ): (
           <img
-            src="/images/Search.svg"
+            src={search}
             alt=""
             className='search__img'
           />
