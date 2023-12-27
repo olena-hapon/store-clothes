@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Slider.scss';
-import slider2 from "../../images/Slider/slider-3.jpg";
-import slider from "../../images/Slider/slider-2.jpg";
-import slider3 from "../../images/Slider/slider-1.jpg";
+import slider2 from "../../images/Slider/slider-2.jpg";
+import slider from "../../images/Slider/slider-1 (2).jpg";
+import slider3 from "../../images/Slider/slider-3 (2).jpg";
 import arrowLeft from "../../images/Slider/Arrow_left.svg";
 import arrowRight from "../../images/Slider/Arrow_right.svg";
 
