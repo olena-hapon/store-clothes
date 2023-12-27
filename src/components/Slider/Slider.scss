@@ -1,32 +1,86 @@
 .slider {
-  width: 100%;
-  height: 700px;
+  width: 100vw;
+  height: 80vh;
+  position: relative;
  
   &__container {
     width: 100%;
     height: 100%;
-  }
-
-  &__swiper {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   &__images-container {
-    width: 100%;
+    width: 300vw;
     height: 100%;
-    overflow: hidden;
+    // overflow: hidden;
+    display: flex;
+    transition: all 1s ease-in-out;
   }
 
-  &__img{
+  &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
   }
+
+  &__buttons {
+    display: flex;
+  }
+
+  &__button {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      border-color: rgb(228 66 209 / 69%);
+      background-color: rgb(235 199 231 / 69%);
+    }
+
+    &--left {
+      top: 300px;
+      left: 10vw;
+      right: 0;
+    }
+
+    &--right {
+      top: 300px;
+      right: 10vw;
+ 
+    }
+  }
+
+  &__pagination {
+    position: absolute;
+    width: fit-content;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    display: flex;
+    margin: auto;
+    gap: 10px;
+  }
 }
 
-.image {
-  width: 100%;
-  height: 100%;
+.pagination-dot {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #fff;
+  background-color: transparent;
+  border-radius: 50%;
+  
+  &--active {
+    background-color: rgb(235 199 231 / 69%);
+  }
 }
+
 

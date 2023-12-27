@@ -29,13 +29,6 @@ const Header = () => {
               </Link>
             </div>
 
-            <Link
-              className='logo'
-              to='/'
-            >
-              <div>DeSire</div>
-            </Link>
-
             <div className="header__top__right">
             <Link className='header__link' to='/'>
                 <img
@@ -63,8 +56,15 @@ const Header = () => {
                 <span className="text">Cart</span>
               </Link>
             </div>
-
           </div>
+
+          <Link
+              className='logo'
+              to='/'
+            >
+              <div>DeSire</div>
+            </Link>
+
           <div className="header__bottom">
             <div className="header__bottom__left-side">
               <nav className="nav">
