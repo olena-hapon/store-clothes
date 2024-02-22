@@ -9,13 +9,13 @@
     bottom: 0px;
     z-index: 10000;
     height: 100%;
-    width: 35%;
+    width: 65%;
     background-color: rgb(241 234 234);
     padding: 30px 20px;
     overflow-y: auto;
 
-    // @media(min-width: 1099px) {
-    //   display: none;
+    // @media(max-width: 600px) {
+    //   width: 100%;
     // }
   }
 

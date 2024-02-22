@@ -195,7 +195,7 @@ const Sort = () => {
     const resizeObserver = new ResizeObserver(([{ target }]) => {
       const boudClientRect = target.getBoundingClientRect();
 
-      if (boudClientRect.width > 384.4375) {
+      if (boudClientRect.width > 714.475) {
         setIsOpenMenuFilter(false)
       }
     });

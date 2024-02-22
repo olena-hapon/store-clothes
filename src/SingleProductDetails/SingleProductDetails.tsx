@@ -27,8 +27,6 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
   let selectRef = useRef<HTMLDivElement>(null);
   // let modalRef = useRef<HTMLDivElement>(null);
 
-
-  console.log(lo)
   useEffect(() => {
     const closeSelect = (e) => {
       // if (modalRef.current !==null && !modalRef.current.contains(e.target)) {

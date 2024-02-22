@@ -91,7 +91,7 @@ const Modal:React.FC<Props> = ({
               </button>
               <Link
                 className="modal__btn"
-                to={'/'}>Procesed to payment
+                to={'/cart'}>Procesed to payment
               </Link>
             </div>
           </>

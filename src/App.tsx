@@ -5,6 +5,7 @@ import {
   RouterProvider,
   Outlet,
   createHashRouter,
+  useLocation,
 } from "react-router-dom";
 import { useEffect } from 'react';
 import Home from './pages/Home/Home';
@@ -14,10 +15,16 @@ import ProductsContainer from './pages/ProductsContainer/ProductsContainer';
 import SingleProductPage from './pages/SingleproductPage/SingleProductPage';
 import { useAppDispatch, useAppSelector } from './redux/store';
 import { setModal } from './redux/slices/filter';
+import Cart from './pages/Cart/Cart';
 // import Products from './pages/Products/Products';
 // import Product from './pages/Product/Product';
 
 const Layout = () => {
+  const pathName = useLocation().pathname;
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathName])
   return (
     <>
       <Header />
@@ -38,6 +45,10 @@ const router = createHashRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "cart",
+        element: <Cart />
       },
       {
         path: "/:category",
@@ -104,11 +115,10 @@ const router = createHashRouter([
 ]);
 
 function App() {
-  const dispatch = useAppDispatch();
   const modal = useAppSelector(state => state.filters.modal)
-  useEffect(() => {
-    dispatch(setModal(false))
-  },)
+  // useEffect(() => {
+  //   dispatch(setModal(false))
+  // },)
   return (
     <div className={!!modal ? 'app app__hidden' : 'app'}>
      <RouterProvider router={router} />

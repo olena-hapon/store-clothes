@@ -13,6 +13,11 @@
   &__right-side {
     grid-area: right-side;
   }
+
+  @media(max-width: 1020px) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .gallery {
@@ -22,6 +27,14 @@
   grid-template-areas:
     "thumbnails main-photo";
   height: 100%;
+
+  @media(max-width: 640px) {
+    display: block;
+  }
+
+  @media(max-width: 1020px) {
+    margin-block-end: 20px;
+  }
 
   &__thumbnails {
     grid-area: thumbnails;
@@ -131,6 +144,11 @@
     opacity: 0;
     cursor: pointer;
 
+    @media(max-width: 640px) {
+      width: 35px;
+      height: 35px;
+    }
+
     &--click {
       background-color: rgb(240, 221, 224);
     }
@@ -155,6 +173,11 @@
     // top: 150px;
     max-width: 90%;
     margin: 40px 90px 0 130px;
+
+    @media(max-width:1020px) {
+      margin: auto;
+      max-width: 100%;
+    }
   }
 
   &__title h1 {
