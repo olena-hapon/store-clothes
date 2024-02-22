@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { makeRequest } from "../helpers/makeRequest";
 // import Categories from "../Types/Categories";
 
-interface Categories {
+export interface Categories {
   attributes: {
     title: string;
       desc: string;
@@ -13,8 +13,25 @@ interface Categories {
     id: number;
 }
 
+export interface Product {
+  attributes: {
+    colors?: string[];
+    createdAt: string;
+    desc: string;
+    fullPrice: number;
+    isNew: boolean;
+    price: number;
+    publishedAt: string;
+    quantity: null;
+    sizes: string[];
+    title: string;
+    updatedAt: string;
+  }
+  id: number;
+}
+
 const useFetch = (url: string) => {
-  const [data, setData] = useState<Categories[]>([]);
+  const [data, setData] = useState<Categories[] | Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -24,7 +41,6 @@ const useFetch = (url: string) => {
         setLoading(true)
         const res = await makeRequest.get(url);
         const add = res.data.data;
-        console.log(add)
         setData(add);
       }
       catch (error: any){

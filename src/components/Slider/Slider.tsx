@@ -1,47 +1,83 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Slider.scss';
 import slider2 from "../../images/Slider/slider-2.jpg";
-import slider from "../../images/Slider/slider-1 (2).jpg";
-import slider3 from "../../images/Slider/slider-3 (2).jpg";
+import slider from "../../images/Slider/slider-1.jpg";
+import slider3 from "../../images/Slider/slider-3.jpg";
 import arrowLeft from "../../images/Slider/Arrow_left.svg";
 import arrowRight from "../../images/Slider/Arrow_right.svg";
+import video from '../../video/video-2.mp4';
+import { Link } from 'react-router-dom';
 
 const Slider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [hidePadding, setHidePadding] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(true);
 
   const images = [
-    {image: slider, id: 0},
-    {image: slider2, id: 1},
-    {image: slider3, id: 2},
+    {image: slider, id: 0, type: 'img', link: 'sales -50%'},
+    {image: slider2, id: 1, type: 'img' ,link: 'new'},
+    {image: slider3, id: 2,type: 'img', link: 'woman'},
+    {Image: video, id: 3, type: 'video', link: ''},
   ]
 
   const slideLeft = () => {
-    setCurrentSlide((prev) => prev === 0 ? 2 : prev - 1 )
+    setCurrentSlide((prev) => prev === 0 ? 3 : prev - 1 )
   };
 
   const slideRight = () => {
-    setCurrentSlide((prev) => prev === 2 ? 0 : prev + 1)
+    setCurrentSlide((prev) => prev === 3 ? 0 : prev + 1)
   };
 
+ useEffect(() => {
+    if (!autoPlay) return;
+    const slideInterval = setInterval(slideRight, 5000);
+    return () => clearInterval(slideInterval);
+ }, [autoPlay]);
+
   // useEffect(() => {
-  //   setTimeout(() => {
-  //     slideRight()
-  //   }, 5000)
-  // })
+  //   const removePaddind = () => {
+  //     if (window.scrollY > 0) {
+  //       setHidePadding(true);
+  //     } else {
+  //       setHidePadding(false);
+  //     }
+  //   }
+
+  //   window.addEventListener('scroll', removePaddind);
+  //     return () => {
+  //       window.removeEventListener('scroll', removePaddind)
+  //     }
+  // }, [])
 
   return (
-    <div className='slider'>
-      <div className="slider__container">
-          <div className="slider__images-container" style={{transform: `translateX(-${currentSlide * 100}vw)`}}>
-            {images.map((image) => (
+    <div className="slider app__section">
+      <div
+        className="slider__container"
+        onMouseEnter={() => setAutoPlay(false)}
+        onMouseLeave={() => setAutoPlay(true)}
+      >
+        <div className="slider__images-container" style={{transform: `translateX(-${currentSlide * 100}%)`}}>
+          {images.map((image) => (
+            image.type === 'img' ? (
+            <Link to={image.link.split(' ')[0]} className='slider__link' key={image.id}>
               <img
-                key={image.id}
                 src={image.image}
-                alt=""
+                alt="slider-img"
                 className='slider__image'
               />
-            ))}
-          </div>
+              <div className="slider__links">
+                <div className='slider__links--to'>{image.link}</div>
+                <div className='slider__links--check'>Check now</div>
+              </div>
+            </Link>
+            ) :(
+            <Link to='woman'className='slider__link' key={image.id}>
+              <video src={video} autoPlay muted loop className='slider__image'>
+                </video>
+            </Link>
+            )
+          ))}
+        </div>
         <div className="slider__buttons">
           <button
             className='slider__button slider__button--left'
