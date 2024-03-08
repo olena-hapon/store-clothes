@@ -15,4 +15,16 @@
     width: 5px;
     color: inherit;
   }
+
+  &__home--link:hover {
+    color: rgb(238, 109, 130);
+  }
+
+  &__link {
+    text-transform: capitalize;
+
+    &:hover {
+      color: rgb(238, 109, 130);
+    }
+  }
 }

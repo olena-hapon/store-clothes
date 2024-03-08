@@ -10,9 +10,10 @@ type Props = {
   singleProduct?: Product;
   openModal: boolean;
   setOpenModal: (boolean) => void;
-  selectValue: string,
-  openSizeInfo: boolean,
-  setOpenSizeInfo: (boolean) => void;
+  selectValue?: string,
+  // openSizeInfoModal: boolean,
+  // setOpenSizeInfoModal: (boolean) => void;
+  children;
 }
 
 const Modal:React.FC<Props> = ({
@@ -20,57 +21,44 @@ const Modal:React.FC<Props> = ({
   openModal,
   setOpenModal,
   selectValue,
-  openSizeInfo,
-  setOpenSizeInfo,
+  children,
 }) => {
 
   let modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
 
-  let size = [
-    { name: 'chai',
-      sizes: ['sizes','s', 'm', 'l', 'xl', 'xxl']
-    },
-    { 
-      name: 'dff',
-      chest: ['chaist', '86', '90', '94', '98', '102']
-    },
-    {
-      name: 'klll',
-      waist: ['waist', '70', '74', '78', '82', '86']
-    }
-  ]
-
   useEffect(() => {
     const closeSelect = (e) => {
       if (modalRef.current !==null && !modalRef.current.contains(e.target)) {
-        setOpenModal(false);
-        setOpenSizeInfo(false)
+        // setOpenSizeInfo(false)
         dispatch(setModal(false))
+        setOpenModal(false);
         console.log('select2')
+        console.log(openModal)
       }
     }
-
+    console.log(openModal)
   document.addEventListener('mousedown', closeSelect)
     return () => {
       document.removeEventListener('mousedown', closeSelect)
     }
-  })
+  }, [openModal])
 
   return (
-    <div className="modal">
-      <div className="modal__styled" ref={modalRef}>
-        <div className="modal__content">
+    <div className={openModal ? "modal modal__active" : "modal"}>
+      <div className={openModal ? "modal__styled modal__styled__active" : "modal__styled"} ref={modalRef}>
+        <div className= "modal__content">
           <div className="modal__header">
             <button
               className="modal__close"
-              onClick={() => {setOpenModal(!openModal); dispatch(setModal(false)); setOpenSizeInfo(false)}}
+              onClick={() => {setOpenModal(!openModal); dispatch(setModal(false))}}
             >
             </button>
           </div>
-          {singleProduct && !openSizeInfo && (
+          {singleProduct && (
           <>
-            <div className="modal__body">
+            {children}
+            {/* <div className="modal__body">
               <div className="modal__icon"></div>
               <h4 className="modal__title">Product added</h4>
               <div className="modal__body__wrapper">
@@ -93,11 +81,11 @@ const Modal:React.FC<Props> = ({
                 className="modal__btn"
                 to={'/cart'}>Procesed to payment
               </Link>
-            </div>
+            </div> */}
           </>
         )}
 
-        {openSizeInfo && (
+        {/* {openSizeInfo && (
           <div>
             {size.map(el => (
               el.sizes?.map(el2 => (
@@ -112,7 +100,7 @@ const Modal:React.FC<Props> = ({
               ))
             ))}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   </div>

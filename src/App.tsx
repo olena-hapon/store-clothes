@@ -16,6 +16,7 @@ import SingleProductPage from './pages/SingleproductPage/SingleProductPage';
 import { useAppDispatch, useAppSelector } from './redux/store';
 import { setModal } from './redux/slices/filter';
 import Cart from './pages/Cart/Cart';
+import Favorites from './pages/Favorites/Favorites';
 // import Products from './pages/Products/Products';
 // import Product from './pages/Product/Product';
 
@@ -49,6 +50,10 @@ const router = createHashRouter([
       {
         path: "cart",
         element: <Cart />
+      },
+      {
+        path: "favorites",
+        element: <Favorites />
       },
       {
         path: "/:category",
@@ -115,12 +120,13 @@ const router = createHashRouter([
 ]);
 
 function App() {
-  const modal = useAppSelector(state => state.filters.modal)
+  const modal = useAppSelector(state => state.filters.modal);
+  const menuMobile = useAppSelector(state => state.filters.menuMobile);
   // useEffect(() => {
   //   dispatch(setModal(false))
   // },)
   return (
-    <div className={!!modal ? 'app app__hidden' : 'app'}>
+    <div className={!!modal || !! menuMobile? 'app app__hidden' : 'app'}>
      <RouterProvider router={router} />
     </div>
   );

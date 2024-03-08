@@ -3,29 +3,69 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import './SingleProductDetails.scss';
 import { Product } from '../Types/Product';
 import { current } from '@reduxjs/toolkit';
-import { useAppDispatch } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/store';
 import { setModal } from '../redux/slices/filter';
 import Modal from '../components/Modal/Modal';
+import '../components/Modal/Modal.scss';
+import SizeTable from '../images/sizeTable.jpg';
+import { addToFavorites } from '../redux/slices/favorites';
+import { addItems } from '../redux/slices/cartSlice';
 
 type Props = {
   singleProduct: Product | undefined;
 }
 
 const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
-  console.log(singleProduct?.color)
+  console.log(singleProduct)
+  const dispatch = useAppDispatch();
   let lo = useLocation().pathname;
   const { id } = useParams();
   const dispath = useAppDispatch();
+  const { favoritesItem } = useAppSelector(state => state.favorites)
   const [side, setSide] = useState('');
   const [currentPhoto, setCurrentPhoto] = useState(0);
   const [selectValue, setSelectValue] = useState('Choose size');
   const [clickSelect, setClickSelect] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [openSizeInfo, setOpenSizeInfo] = useState(false);
+  const [openSizeInfoModal, setOpenSizeInfoModal] = useState(false);
   const [noAddSize, setNoAddSize] = useState(false);
   const length = !!singleProduct?.images.length ? singleProduct.images.length : 0;
   let selectRef = useRef<HTMLDivElement>(null);
-  // let modalRef = useRef<HTMLDivElement>(null);
+
+  console.log(singleProduct?.category)
+
+  let sizes = ['s', 'm', 'l', 'xl', 'xxl'];
+  let womanSizesChest = {
+    s: 86,
+    m: 90,
+    l: 94,
+    xl: 98,
+    xxl: 102,
+  } 
+  
+  let WomanSizeWaist = {
+    s: 70,
+    m: 74,
+    l: 78,
+    xl: 82,
+    xxl: 86
+  }
+  let manSizesChest = {
+    s: 92,
+    m: 96,
+    l: 100,
+    xl: 104,
+    xxl: 108,
+  } 
+  
+  let manSizeWaist = {
+    s: 82,
+    m: 88,
+    l: 94,
+    xl: 100,
+    xxl: 106,
+  }
+
 
   useEffect(() => {
     const closeSelect = (e) => {
@@ -74,17 +114,31 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
 
   const onAddToCard = (selectValue) => {
     if (['s','m','l','xl','xxl'].includes(selectValue)) {
-          console.log('go in first', selectValue)
-          setOpenModal(true);
-          setNoAddSize(false);
-          dispath(setModal(true))
+      setOpenModal(true);
+      setNoAddSize(false);
+      dispath(setModal(true))
     } else {
       setNoAddSize(true);
       dispath(setModal(false))
-      console.log('go in second', selectValue)
     }
   }
 
+  //--------Add to cart-------//
+  const addTocard = (singleProduct) => {
+    const item = {
+      id: singleProduct?.id,
+      title: singleProduct?.title,
+      imageUrl: singleProduct?.images[0],
+      discountPrice: singleProduct?.discountPrice,
+      price: singleProduct?.price,
+      color: singleProduct?.color,
+      category: singleProduct?.category,
+      subCategory: singleProduct?.subCategory,
+      size: selectValue,
+    }
+
+    dispatch(addItems(item))
+  }
   return (
     <div className='singleProductDetails'>
       <div className="singleProductDetails__left-side">
@@ -95,6 +149,7 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
                 <ul>
                   {!!singleProduct && singleProduct.images.map((image, ind) => (
                     <li
+                      key={ind}
                       className={currentPhoto === ind
                       ? "gallery__thumbnails__styled gallery__thumbnails__styled--active"
                       : "gallery__thumbnails__styled"
@@ -131,6 +186,7 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
                 <div className="gallery__mainPhoto__swipe">
                   {!!singleProduct && singleProduct.images.map((image, ind) => (
                     <div
+                      key={ind}
                       className={currentPhoto === ind ?
                         " gallery__mainPhoto__styled gallery__mainPhoto__styled--active"
                         : "gallery__mainPhoto__styled"
@@ -223,7 +279,7 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
           <div className="right-side__sizes">
             <div
               className="right-side__sizes__sizeInfo"
-              onClick={() => {setOpenModal(!openModal); setOpenSizeInfo(!openSizeInfo)}}
+              onClick={() => {setOpenSizeInfoModal(!openSizeInfoModal); dispatch(setModal(true))}}
             >
               {noAddSize && <div className='right-side__sizes__noAdd'>Choose sizes</div>}
               <div className="right-side__sizes__sizeInfo__wrapper">
@@ -282,7 +338,10 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
           </div>
         </div>
         <div className="cartConfirmation">
-          <div className="cartConfirmation__add">
+          <div
+            className="cartConfirmation__add"
+            onClick={() => addTocard(singleProduct)}
+          >
               <button
                 className="cartConfirmation__Btn"
                 onClick={() => onAddToCard(selectValue)}
@@ -309,19 +368,25 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
                 </span>
               </button>
             </div>
-            <div className="cartConfirmation__addToFav">
+            <div
+              className="cartConfirmation__addToFav"
+              onClick={() => dispatch(addToFavorites(singleProduct))}
+            >
               <div className="cartConfirmation__heart">
-                <svg width="30" height="30" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M5.5 1.5C3.43198 1.5 1.75 3.1846 1.75 5.26948C1.75 5.87495 1.84536 6.3373 2.04471 6.76477C2.24842 7.20158 2.58188 7.64752 3.12462 8.19027L3.13231 8.19795L9.99996 15.4754L16.8618 8.20297L16.8695 8.19527C17.5768 7.48797 18.25 6.37996 18.25 5.26948C18.25 3.1846 16.568 1.5 14.5 1.5C12.5433 1.5 11.2185 3.10404 10.7342 5.42282C10.6615 5.7708 10.3545 6.01996 9.99899 6.01948C9.64349 6.019 9.33717 5.76901 9.26543 5.42083C8.78205 3.07478 7.45981 1.5 5.5 1.5ZM0.25 5.26948C0.25 2.36228 2.59745 0 5.5 0C7.66613 0 9.1427 1.27962 10.0037 2.983C10.865 1.29128 12.3384 0 14.5 0C17.4025 0 19.75 2.36228 19.75 5.26948C19.75 6.92677 18.7928 8.39016 17.9381 9.24799L10 17.661L2.05617 9.24312C1.45035 8.63624 0.989303 8.05067 0.685274 7.39875C0.375578 6.73467 0.25 6.04768 0.25 5.26948Z" fill="pink"/>
-                </svg>
-
-                {/* <svg width="30px" height="30px" viewBox="0 -1 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                    <g id="Icon-Set-Filled"  transform="translate(-102.000000, -882.000000)" fill="pink">
-                      <path d="M126,882 C122.667,882 119.982,883.842 117.969,886.235 C116.013,883.76 113.333,882 110,882 C105.306,882 102,886.036 102,890.438 C102,892.799 102.967,894.499 104.026,896.097 L116.459,911.003 C117.854,912.312 118.118,912.312 119.513,911.003 L131.974,896.097 C133.22,894.499 134,892.799 134,890.438 C134,886.036 130.694,882 126,882" id="heart-like" ></path>
-                    </g>
-                  </g>
-                </svg> */}
+                {singleProduct && favoritesItem.filter((fav) => fav.id === singleProduct.id).length > 0 ? (
+                    <svg width="30px" height="30px" viewBox="0 -1 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="Icon-Set-Filled"  transform="translate(-102.000000, -882.000000)" fill="pink">
+                          <path d="M126,882 C122.667,882 119.982,883.842 117.969,886.235 C116.013,883.76 113.333,882 110,882 C105.306,882 102,886.036 102,890.438 C102,892.799 102.967,894.499 104.026,896.097 L116.459,911.003 C117.854,912.312 118.118,912.312 119.513,911.003 L131.974,896.097 C133.22,894.499 134,892.799 134,890.438 C134,886.036 130.694,882 126,882" id="heart-like" ></path>
+                        </g>
+                      </g>
+                    </svg>
+                    ) : (
+                    <svg width="30" height="30" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fillRule="evenodd" clipRule="evenodd" d="M5.5 1.5C3.43198 1.5 1.75 3.1846 1.75 5.26948C1.75 5.87495 1.84536 6.3373 2.04471 6.76477C2.24842 7.20158 2.58188 7.64752 3.12462 8.19027L3.13231 8.19795L9.99996 15.4754L16.8618 8.20297L16.8695 8.19527C17.5768 7.48797 18.25 6.37996 18.25 5.26948C18.25 3.1846 16.568 1.5 14.5 1.5C12.5433 1.5 11.2185 3.10404 10.7342 5.42282C10.6615 5.7708 10.3545 6.01996 9.99899 6.01948C9.64349 6.019 9.33717 5.76901 9.26543 5.42083C8.78205 3.07478 7.45981 1.5 5.5 1.5ZM0.25 5.26948C0.25 2.36228 2.59745 0 5.5 0C7.66613 0 9.1427 1.27962 10.0037 2.983C10.865 1.29128 12.3384 0 14.5 0C17.4025 0 19.75 2.36228 19.75 5.26948C19.75 6.92677 18.7928 8.39016 17.9381 9.24799L10 17.661L2.05617 9.24312C1.45035 8.63624 0.989303 8.05067 0.685274 7.39875C0.375578 6.73467 0.25 6.04768 0.25 5.26948Z" fill="pink"/>
+                    </svg>
+                    )
+                }
               </div>
             </div>
           </div>
@@ -338,16 +403,112 @@ const SingleProductDetails:React.FC<Props> = ({ singleProduct }) => {
             </div>
         </div>
       </div>
-      {openModal && (
+      {/* {openModal && ( */}
         <Modal
           singleProduct={singleProduct}
           openModal={openModal}
           setOpenModal={setOpenModal}
           selectValue={selectValue}
-          openSizeInfo={openSizeInfo}
-          setOpenSizeInfo={setOpenSizeInfo}
-        />
-      )}
+        >
+          <div className="modal__body">
+            <div className="modal__icon"></div>
+            <h4 className="modal__title">Product added</h4>
+            <div className="modal__body__wrapper">
+              <img src={singleProduct?.images[0]} alt="" className="modal__img" />
+                <div className="modal__desc">
+                  <div className="modal__name">{singleProduct?.title}</div>
+                  <div className="modal__price">{singleProduct?.discountPrice}$</div>
+                  <div className="modal__size">Size {selectValue.toUpperCase()}</div>
+                </div>
+            </div>
+          </div>
+          <div className="modal__buttons">
+            <button
+              className="modal__btn"
+              onClick={() => {setOpenModal(!openModal); dispatch(setModal(false))}}
+            >
+              Continue Shopping
+            </button>
+            <Link
+              className="modal__btn"
+              to={'/cart'}>Procesed to payment
+            </Link>
+          </div>
+        </Modal>
+
+        <Modal
+          singleProduct={singleProduct}
+          openModal={openSizeInfoModal}
+          setOpenModal={setOpenSizeInfoModal}
+          selectValue={selectValue}
+        >
+          <div className='size-table'>
+            <div className='size-table__container'>
+              <div className="size-table__woman">
+                <h3 className="size-table__title">Size guide for woman</h3>
+                  <div className="size-table__wrapper">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th className='size-table__first'><span>Size</span></th>
+                            {sizes.map((size, ind) => (
+                          <th key={ind}className='size-table__th'><span>{size}</span></th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className='size-table__colored'>
+                          <td className='size-table__first'><span>chest</span></td>
+                          {sizes.map((size, ind) => (
+                            <td key={ind} className='size-table__td'><span>{womanSizesChest[size]}</span></td>
+                          ))}
+                        </tr>
+                        <tr>
+                          <td className='size-table__first'><span>Waist</span></td>
+                            {sizes.map((size, ind) => (
+                          <td key={ind} className='size-table__td'>{WomanSizeWaist[size]}</td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="size-table__man">
+                  <h3 className="size-table__title">Size guide for man</h3>
+                  <div className="size-table__wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th className='size-table__first'><span>Size</span></th>
+                          {sizes.map((size, ind) => (
+                            <th key={ind}className='size-table__th'><span>{size}</span></th>
+                          ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className='size-table__colored'>
+                        <td className='size-table__first'><span>chest</span></td>
+                          {sizes.map((size, ind) => (
+                            <td key={ind} className='size-table__td'><span>{manSizesChest[size]}</span></td>
+                          ))}
+                      </tr>
+                      <tr>
+                        <td className='size-table__first'><span>Waist</span></td>
+                          {sizes.map((size, ind) => (
+                            <td key={ind}className='size-table__td'>{manSizeWaist[size]}</td>
+                          ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <img src={SizeTable} alt="" className="size-table__img" />
+          </div>
+        </Modal>
+     
+      {/* )} */}
 
       {/* {openModal && <div className="modal">
         <div className="modal__styled" ref={modalRef}>

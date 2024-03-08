@@ -12,22 +12,27 @@ type Props = {
 }
 
 const Card:React.FC<Props> = ({ product }) => {
+  console.log(product);
   const dispatch = useAppDispatch();
 
   const location = useLocation().pathname;
   const pathName = location.split('/').slice(1);
-  console.log(pathName.length)
 
   const getPathName = (prod) => {
     if (pathName[1] !== undefined && pathName.length < 3) {
+      // console.log(1)
       return `./${prod.category}/../${prod.subCategory}/../${prod.id}/${prod.title.replaceAll(' ', '-')}`
     }  else if (!pathName[0]){
+      // console.log(2)
       return `/${prod.category}/${prod.subCategory}/${prod.id}/${prod.title.replaceAll(' ', '-')}`
     } else if (pathName.length >= 3) {
-      console.log(' go go')
-       return `/${prod.category}/${prod.subCategory}/${prod.id}/${prod.title.replaceAll(' ', '-')}`
+      // console.log(3)
+       return `../${prod.category}/${prod.subCategory}/${prod.id}/${prod.title.replaceAll(' ', '-')}`
+    } else if (pathName[0] === 'new' || pathName[0] === 'sales') {
+      return `./${prod.category}/${prod.id}/${prod.title.replaceAll(' ', '-')}`
     } else {
-      return `./${prod.category}/../${prod.subCategory}/${prod.id}/${prod.title.replaceAll(' ', '-')}`
+      // console.log(4)
+      return `./../${prod.category}/${prod.subCategory}/${prod.id}/${prod.title.replaceAll(' ', '-')}`
     }
   }
   
@@ -50,8 +55,8 @@ const Card:React.FC<Props> = ({ product }) => {
           <img src={product.images[1]} alt="card" className="card__img card__images--second" />
           <div className="card__hover">
             <ul className="card__hover__list">
-              {product.aviable.map(el => (
-                <li>{el.size}</li>
+              {product.aviable.map((el, ind) => (
+                <li key={ind}>{el.size}</li>
               ))}
             </ul>
           </div>

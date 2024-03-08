@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './BreadCrumbs.scss';
 
@@ -6,7 +6,25 @@ const BreadCrumbs = () => {
   const location = useLocation().pathname;
   const pathName = location.split('/').slice(1);
   pathName.splice(2, 1);
+  let items: string[] = [];
+
+   
+    const breadCrunmbs = (item) => {
+      if (item === 'woman' || item === 'mans' || item === 'new' || item === 'sales') {
+        items.push(item);
+        if ((item === 'woman' || item === 'mans') && (items.includes('new') || items.includes('sales'))) {
+          console.log('go in 1')
+          
+          return `./../../../${item}`;
+        }
+      } else if (item !== 'woman' && item !== 'mans' || item !== 'new' || item !== 'sales') {
+        return `./../../../${item}`;
+      }
+      console.log('go in 2')
+      return `./../../../../${item}`
+    }
  
+ console.log(items)
   return (
     <div className='breadCrumbs'>
       <span className="breadCrumbs__home">
@@ -14,9 +32,12 @@ const BreadCrumbs = () => {
           DeSire
         </Link>
       </span>
-      {pathName.map((item, ind) => (
+      {pathName && pathName.map((item, ind) => (
         <span className="breadCrumbs__name" key={ind}>
-          <Link to={`./../../../${item}`} className="breadCrumbs__link">
+          <Link
+            to={(breadCrunmbs(item))}
+            className="breadCrumbs__link"
+          >
             {item.replaceAll('-', ' ')}
           </Link>
         </span>

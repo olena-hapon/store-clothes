@@ -12,15 +12,20 @@ import heart from '../../images/icons8-heart-48-corral.png';
 import womanNew from '../../images/woman__new.jpg';
 import manNew from '../../images/man__new.jpg';
 import { fetchCategory } from '../../redux/slices/category';
-import { setCategory, setSubCategory, setIsNew, setSales } from '../../redux/slices/filter';
-
+import { setCategory, setSubCategory, setIsNew, setSales, setToogleMenuMobile } from '../../redux/slices/filter';
+import MiniCart from '../MiniCart/MiniCart';
+import MenuMobile from '../MenuMobile/MenuMobile';
 
 
 const Header = () => {
-  const [hideHeader, setHideHeader] = useState(false);  
+  const [hideHeader, setHideHeader] = useState(false);
+  const [openMenuMobile, setOpenMenuMobile] = useState(false);
   const dispatch = useAppDispatch();
   const { category } = useAppSelector(state => state.category);
   const title = '';
+  const favoritesItem = useAppSelector(state => state.favorites.favoritesItem);
+  const { items } = useAppSelector(state => state.cart);
+  const totalCount = items.reduce((sum, item) => sum + item.count, 0)
   
   useEffect(() => {
     dispatch(fetchCategory());
@@ -116,13 +121,18 @@ const Header = () => {
             </div>
 
             <div className="header__top__right">
-            <Link className='header__link' to='/'>
+            <Link className='header__link' to='/favorites'>
                 <img
                   src={favorites}
                   className='icon'
                   alt="header-help"
                 />
                 <span className="text">Favorites</span>
+                {favoritesItem.length > 0 ? (
+                  <span>{favoritesItem.length}</span>
+                ) : (
+                  ''
+                )}
               </Link>
 
               <Link className='header__link' to='/'>
@@ -133,13 +143,25 @@ const Header = () => {
                 />
                 <span className="text">Account</span>
               </Link>
-              <Link className='header__link' to='/'>
+              <Link className='header__link header__link__cart' to='/cart'>
                 <img
                   src={cart}
                   className='icon'
                   alt="header-help"
                 />
                 <span className="text">Cart</span>
+                {totalCount > 0 ? (
+                  <span>{totalCount}</span>
+                ) : (
+                  ''
+                )}
+                <div className='header__miniCart'>
+                  {items.length > 0 ? (
+                     <MiniCart products={items}/>
+                  ) : (
+                    ''
+                  )}
+                </div>
               </Link>
             </div>
           </div>
@@ -157,8 +179,15 @@ const Header = () => {
               <div className="open-menu">
                 <button
                   className="open-menu__button"
+                  onClick={() => {setOpenMenuMobile(!openMenuMobile); dispatch(setToogleMenuMobile(true))}}
                 />
               </div>
+
+              <MenuMobile
+                openMenuMobile={openMenuMobile}
+                setOpenMenuMobile={setOpenMenuMobile}
+              />
+
               <nav className="nav">
                 <ul className='nav__list'>
                   {!!category && (

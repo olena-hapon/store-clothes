@@ -1,20 +1,51 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import category from "./slices/category";
 import products from "./slices/products";
 import filters from "./slices/filter";
 import singleProduct from "./slices/singleProduct";
+import favorites from "./slices/favorites";
+import cart from "./slices/cartSlice";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage/";
 
-export const store = configureStore({
-  reducer: {
-    category,
-    products,
-    filters,
-    singleProduct,
-  }
+const persistConfigOne = {
+  key: 'local',
+  storage,
+  blacklist : ['category', 'products', 'filters', 'singleProduct']
+};
+
+const myCombineReducer = combineReducers({
+  category,
+  products,
+  filters,
+  singleProduct,
+  favorites,
+  cart,
+})
+
+const localStorageReducer = persistReducer(persistConfigOne, myCombineReducer)
+
+export const basicStoreConfig = configureStore({
+  reducer: localStorageReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// export const store = configureStore({
+//   reducer: {
+//     category,
+//     products,
+//     filters,
+//     singleProduct,
+//     favorites,
+//     cart,
+//   }
+// });
+
+export type RootState = ReturnType<typeof basicStoreConfig.getState>;
+export type AppDispatch = typeof basicStoreConfig.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

@@ -10,6 +10,7 @@ import { fetchCategory } from '../../redux/slices/category';
 import Filters from '../../components/Filters/Filters';
 import ProductsList from '../../components/ProductsList/ProductsList';
 import { Product } from '../../Types/Product';
+import favorites from '../../redux/slices/favorites';
 
 export const getFiltersByColors = (products, filterColors, filterSizes) => {
   let filterBy;
@@ -152,7 +153,7 @@ const ProductsContainer = () => {
 
   const mainCategory = categoryLinks.filter((cat) => cat.title === categoryName)
 
-  return (
+ return (
     <section className='productsContainer app__section'>
       <div className="breadcrumbs">
         <BreadCrumbs />

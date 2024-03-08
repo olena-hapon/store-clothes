@@ -9,6 +9,7 @@ type InitialState = {
   filterColors: string[];
   filterSizes: string[];
   modal: boolean;
+  menuMobile: boolean;
   sort : {
     name: string,
     sortBy: string,
@@ -25,6 +26,7 @@ const initialState:InitialState = {
   filterColors: [],
   filterSizes: [],
   modal: false,
+  menuMobile: false,
   sort : {
     name: '',
     sortBy: 'discountPrice',
@@ -102,10 +104,14 @@ const filtersSlice = createSlice({
 
     setModal(state, action) {
       state.modal = action.payload;
+    },
+
+    setToogleMenuMobile(state, action) {
+      state.menuMobile = action.payload;
     }
   },
 });
 
-export const { setCategory, setSubCategory, setIsNew, setSales, setColors, deleteColors,setSizes, deleteSizes, setSort, setFromSearch, setModal } = filtersSlice.actions;
+export const { setCategory, setSubCategory, setIsNew, setSales, setColors, deleteColors,setSizes, deleteSizes, setSort, setFromSearch, setModal, setToogleMenuMobile } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

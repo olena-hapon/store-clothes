@@ -1,5 +1,7 @@
 .productsContainer {
   padding: 55px 40px 0;
+  max-width: 1440px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 5fr;
   grid-template-areas:
