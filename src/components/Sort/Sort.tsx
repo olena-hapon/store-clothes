@@ -66,7 +66,7 @@ const Sort = () => {
     } else {
       params.set('price', item);
       setSearchParams(params);
-      setIsOpenPrice(false);
+      // setIsOpenPrice(false);
       console.log(item2)
       dispatch(setSort(item2))
     }
@@ -297,7 +297,7 @@ const Sort = () => {
               <div className="dropdownMenu__filterBtn">
                 <button
                   className="dropdownMenu__filterBtn__text"
-                  // onClick={() => handleChangePrice(priceList)}
+                  onClick={() => {setIsOpenPrice(!isOpenPrice); setIsOpenMenuFilter(!isOpenMenuFilter)}}
                 >
                   Sort
                 </button>
@@ -354,7 +354,7 @@ const Sort = () => {
               <div className="dropdownMenu__filterBtn">
                 <button
                   className="dropdownMenu__filterBtn__text"
-                  onClick={() => handleChangeColor(colorsList)}
+                  onClick={() => {setIsOpenColors(!isOpenColors); setIsOpenMenuFilter(!isOpenMenuFilter)}}
                 >
                   Filter
                 </button>
@@ -407,7 +407,7 @@ const Sort = () => {
               <div className="dropdownMenu__filterBtn">
                 <button
                   className="dropdownMenu__filterBtn__text"
-                  onClick={() => handleChangeSizes(sizesList)}
+                  onClick={() => {setIsOpenSizes(!isOpenSizes); setIsOpenMenuFilter(!isOpenMenuFilter)}}
                 >
                   Filter
                 </button>
