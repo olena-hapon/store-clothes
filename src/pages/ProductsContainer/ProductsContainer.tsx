@@ -3,7 +3,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import BreadCrumbs from '../../components/BreadCrumbs.tsx/BreadCrumbs';
 import './ProductsContainer.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import filter, { setCategory, setSubCategory, setIsNew, setSales, setFromSearch } from '../../redux/slices/filter';
+import filter, { setCategory, setSubCategory, setIsNew, setSales, setFromSearch, deleteColors, deleteSizes, setSort } from '../../redux/slices/filter';
 import { fetchProducts } from '../../redux/slices/products';
 import { fetchCategory } from '../../redux/slices/category';
 
@@ -11,6 +11,7 @@ import Filters from '../../components/Filters/Filters';
 import ProductsList from '../../components/ProductsList/ProductsList';
 import { Product } from '../../Types/Product';
 import favorites from '../../redux/slices/favorites';
+import Skeleton from '../../components/Skeleton/Skeleton';
 
 export const getFiltersByColors = (products, filterColors, filterSizes) => {
   let filterBy;
@@ -86,6 +87,10 @@ const ProductsContainer = () => {
   const dispatch = useAppDispatch();
   const { category, subCategory, isNew, isSales, page, filterColors, filterSizes, sort } = useAppSelector((state) => state.filters);
   const { products } = useAppSelector((state) => state.products);
+  const { searchValue } = useAppSelector(state => state.search);
+  const status = useAppSelector(state => state.products.status);
+  const menuSearch = useAppSelector(state => state.filters.menuSearch)
+
   console.log(location)
 
   const { category: categoryLinks } = useAppSelector(state => state.category);
@@ -102,6 +107,7 @@ const ProductsContainer = () => {
           isSales: '',
           sort: price,
         }))
+        
       }
       if (categoryName === 'sales') {
         dispatch(setFromSearch({
@@ -113,6 +119,7 @@ const ProductsContainer = () => {
           isSales: 50,
           sort: price,
         }))
+       
       }
 
       if (categoryName !== 'new' && categoryName !== 'sales') {
@@ -125,27 +132,35 @@ const ProductsContainer = () => {
           isSales: '',
           sort: price,
         }))
+        
+        console.log('prodContainer 1')
       }
-
-      isSearch.current = true;
     }
   }, [])
 
+  useEffect(() => {
+    dispatch(deleteColors());
+    dispatch(deleteSizes());
+    dispatch(setSort({name:'', sortBy: 'discountPrice', order: ''}));
+  },[location])
 
   useEffect(() => {
-    if (!isSearch.current) {
-      dispatch(fetchProducts({ category, subCategory, isNew, isSales, page, sort }))
+    if (!!menuSearch) {
+      return;
+    }
+    if (isSearch.current) {
+      dispatch(fetchProducts({ category, subCategory, isNew, isSales, page, sort, searchValue }))
+      console.log('prodContainer 2')
     }
 
-    isSearch.current = false;
-  }, [dispatch, category, subCategory, isNew, sort])
+    isSearch.current = true;
+  }, [category, subCategory, isNew, sort])
 
 
   useEffect(() => {
     let filtered = getFiltersByColors(products, filterColors, filterSizes);
     setProd(filtered)
   }, [products, filterColors, location, filterSizes, sort])
-  console.log(prod)
 
   useEffect(() => {
     dispatch(fetchCategory())
@@ -153,20 +168,26 @@ const ProductsContainer = () => {
 
   const mainCategory = categoryLinks.filter((cat) => cat.title === categoryName)
 
- return (
-    <section className='productsContainer app__section'>
-      <div className="breadcrumbs">
-        <BreadCrumbs />
-      </div>
+  return (
+        <>  
+        {(status === 'loading') ? (
+         <Skeleton type='prodWrap'/>
+        ): (
+          <section className='productsContainer app__section'>
+            <div className="breadcrumbs">
+              <BreadCrumbs />
+            </div>
 
-      <div className="sideBar">
-        <Filters links={mainCategory} />
-      </div>
+            <div className="sideBar">
+              <Filters links={mainCategory} />
+            </div>
 
-      <div className="rightSide">
-        <ProductsList products={prod} />
-      </div>
-    </section>
+            <div className="rightSide">
+              <ProductsList products={prod} />
+            </div>
+          </section>
+        )}
+        </>
   )
 }
 

@@ -19,6 +19,8 @@ const SingleProductPage = () => {
   const { subCategory, category, isNew, isSales, page, filterColors, filterSizes, sort } = useAppSelector(state => state.filters)
   const singleProduct = useAppSelector(state => state.singleProduct.product);
   const products = useAppSelector(state => state.products.products);
+  const { searchValue } = useAppSelector(state => state.search);
+
   console.log(singleProduct);
 
   //-----fetch products----////
@@ -69,7 +71,7 @@ const SingleProductPage = () => {
         }))
       }
     
-      dispatch(fetchProducts({ category, subCategory, isNew, isSales, page, sort }))
+      dispatch(fetchProducts({ category, subCategory, isNew, isSales, page, sort, searchValue }))
       isFetch.current = true;
       console.log('go in fetch')
     }

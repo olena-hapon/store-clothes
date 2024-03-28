@@ -35,12 +35,16 @@
       font-size: 22px;
     }
     @media(max-width: 460px) {
-      font-size: 18px;
+      font-size: 14px;
     }
   }
 
   &__text {
     margin-block-end: 15px;
+
+    @media(max-width: 460px) {
+      font-size: 12px;
+    }
   }
 
   &__img {
@@ -54,7 +58,7 @@
       height: 400px;
     }
     @media(max-width: 460px) {
-      height: 300px;
+      height: 250px;
     }
   }
 

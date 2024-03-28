@@ -6,13 +6,16 @@ import filters from "./slices/filter";
 import singleProduct from "./slices/singleProduct";
 import favorites from "./slices/favorites";
 import cart from "./slices/cartSlice";
+import search from "./slices/search";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage/";
+import user from "./slices/user";
+import user2 from "./slices/user2";
 
 const persistConfigOne = {
   key: 'local',
   storage,
-  blacklist : ['category', 'products', 'filters', 'singleProduct']
+  blacklist : ['category', 'products', 'filters', 'singleProduct', 'user', 'user2']
 };
 
 const myCombineReducer = combineReducers({
@@ -22,6 +25,9 @@ const myCombineReducer = combineReducers({
   singleProduct,
   favorites,
   cart,
+  search,
+  user,
+  user2,
 })
 
 const localStorageReducer = persistReducer(persistConfigOne, myCombineReducer)

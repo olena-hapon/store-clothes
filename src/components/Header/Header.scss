@@ -63,6 +63,14 @@
     display: flex;
     justify-content: space-between;
     top: 0;
+    text-wrap: nowrap;
+
+    &__spBt {
+      display: flex;
+      justify-content: space-between;
+      text-wrap: nowrap;
+    }
+
 
     @media(max-width: 1099px) {
       flex-direction: column;
@@ -70,6 +78,11 @@
 
       &__left-side {
         margin-block-end: 30px;
+      }
+
+      &__spBt {
+        display: flex;
+        justify-content: space-between;
       }
     }
 
@@ -83,6 +96,11 @@
 
 .nav {
   display: flex;
+
+    &--hidden {
+      display: none;
+    }
+
   @media(max-width: 560px) {
     display: none;
   }
@@ -199,8 +217,9 @@
   font-weight: bold;
   letter-spacing: 4px;
 
-  @media(max-width: 199px) {
-    font-size: 36px;
+  @media(max-width: 760px) {
+    font-size: 34px;
+    letter-spacing: 3px;
     height: 60px;
   }
 
@@ -295,6 +314,11 @@
 }
 
 .header__link__cart:hover {
+  .header__miniCart {
+    display: block;
+  }
+}
+.header__link__account:hover {
   .header__miniCart {
     display: block;
   }

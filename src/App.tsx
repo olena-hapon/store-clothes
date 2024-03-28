@@ -17,11 +17,13 @@ import { useAppDispatch, useAppSelector } from './redux/store';
 import { setModal } from './redux/slices/filter';
 import Cart from './pages/Cart/Cart';
 import Favorites from './pages/Favorites/Favorites';
+import UserAccount from './components/UserAccount/UserAccount';
 // import Products from './pages/Products/Products';
 // import Product from './pages/Product/Product';
 
 const Layout = () => {
   const pathName = useLocation().pathname;
+  console.log(pathName)
   const dispatch = useAppDispatch();
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -32,7 +34,9 @@ const Layout = () => {
       <div className="main">
         <Outlet />
       </div>
-      <Footer />
+      {pathName !== '/account' ? (
+        <Footer />
+      ) : ''}
     </>
       
   )
@@ -54,6 +58,10 @@ const router = createHashRouter([
       {
         path: "favorites",
         element: <Favorites />
+      },
+      {
+        path: "account",
+        element: <UserAccount />
       },
       {
         path: "/:category",
@@ -122,11 +130,13 @@ const router = createHashRouter([
 function App() {
   const modal = useAppSelector(state => state.filters.modal);
   const menuMobile = useAppSelector(state => state.filters.menuMobile);
+  const menuSearch = useAppSelector(state => state.filters.menuSearch)
+
   // useEffect(() => {
   //   dispatch(setModal(false))
   // },)
   return (
-    <div className={!!modal || !! menuMobile? 'app app__hidden' : 'app'}>
+    <div className={!!modal || !! menuMobile || !!menuSearch ? 'app app__hidden' : 'app'}>
      <RouterProvider router={router} />
     </div>
   );

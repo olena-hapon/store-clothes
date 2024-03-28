@@ -15,18 +15,24 @@ import { fetchCategory } from '../../redux/slices/category';
 import { setCategory, setSubCategory, setIsNew, setSales, setToogleMenuMobile } from '../../redux/slices/filter';
 import MiniCart from '../MiniCart/MiniCart';
 import MenuMobile from '../MenuMobile/MenuMobile';
+import Skeleton from '../Skeleton/Skeleton';
+import UserAccountMini from '../UserAccauntMini/UserAccountMini';
 
 
 const Header = () => {
   const [hideHeader, setHideHeader] = useState(false);
   const [openMenuMobile, setOpenMenuMobile] = useState(false);
   const dispatch = useAppDispatch();
+  const menuSearch = useAppSelector(state => state.filters.menuSearch);
   const { category } = useAppSelector(state => state.category);
-  const title = '';
+  const status = useAppSelector(state => state.category.status);
+  const showForm = useAppSelector(state => state.user.showForm);
   const favoritesItem = useAppSelector(state => state.favorites.favoritesItem);
   const { items } = useAppSelector(state => state.cart);
-  const totalCount = items.reduce((sum, item) => sum + item.count, 0)
-  
+  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+  const user2 = useAppSelector(state => state.user2.user2);
+  const title = '';
+
   useEffect(() => {
     dispatch(fetchCategory());
   }, [])
@@ -129,19 +135,22 @@ const Header = () => {
                 />
                 <span className="text">Favorites</span>
                 {favoritesItem.length > 0 ? (
-                  <span>{favoritesItem.length}</span>
+                  <span>({favoritesItem.length})</span>
                 ) : (
                   ''
                 )}
               </Link>
 
-              <Link className='header__link' to='/'>
+              <Link className='header__link header__link__account' to='account'>
                 <img
                   src={account}
                   className='icon'
                   alt="header-help"
                 />
                 <span className="text">Account</span>
+                <div className="header__miniCart">
+                  <UserAccountMini />
+                </div>
               </Link>
               <Link className='header__link header__link__cart' to='/cart'>
                 <img
@@ -151,7 +160,7 @@ const Header = () => {
                 />
                 <span className="text">Cart</span>
                 {totalCount > 0 ? (
-                  <span>{totalCount}</span>
+                  <span>({totalCount})</span>
                 ) : (
                   ''
                 )}
@@ -171,11 +180,14 @@ const Header = () => {
             to='/'
           >
             <div>DeSire</div>
-            <span><img src={heart} alt="" style={{height: 30,width: 30}}/></span>
+            {/* <span><img src={heart} alt="heart" style={{height: 30,width: 30}}/></span> */}
           </Link>
 
-          <div className="header__bottom">
-            <div className="header__bottom__left-side">
+          <div className={!!menuSearch ? "header__bottom__spBt" : "header__bottom"}>
+            {status === 'loading' ? (
+              <Skeleton type='topHeader'/>
+            ) : (
+              <div className="header__bottom__left-side">
               <div className="open-menu">
                 <button
                   className="open-menu__button"
@@ -188,7 +200,7 @@ const Header = () => {
                 setOpenMenuMobile={setOpenMenuMobile}
               />
 
-              <nav className="nav">
+              <nav className={!!menuSearch ? "nav--hidden" : "nav"}>
                 <ul className='nav__list'>
                   {!!category && (
                     category.map((item) => (
@@ -286,6 +298,8 @@ const Header = () => {
                 </ul>
               </nav>
             </div>
+            )}
+            
 
             <Search />
           </div>

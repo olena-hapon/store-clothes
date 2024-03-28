@@ -8,6 +8,14 @@
     position: relative;
     margin-bottom: 10px;
 
+    @media(max-width: 460px) {
+      height: 300px;
+    }
+
+    &--300 {
+      height: 300px;
+    }
+
     @media(min-width: 1550px) {
       height: 650px;
       padding-bottom: 100%;
@@ -68,6 +76,7 @@
     font-size: 18px;
     font-weight: 400;
     margin-block-end: 10px;
+    text-align: center;
 
     @media(max-width: 1100px) {
       font-size: 14px;
@@ -76,6 +85,7 @@
 
   &__price-wrapper {
     display: flex;
+    justify-content: center;
     gap: 5px;
   }
 

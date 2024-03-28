@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './Slider.scss';
-import slider2 from "../../images/Slider/slider-2.jpg";
-import slider from "../../images/Slider/slider-1.jpg";
-import slider3 from "../../images/Slider/slider-3.jpg";
+import slider2 from "../../images/Slider/slider-2.2.jpg";
+import slider from "../../images/Slider/slider-1.1.jpg";
+import slider3 from "../../images/Slider/slider-3.3.jpg";
 import arrowLeft from "../../images/Slider/Arrow_left.svg";
 import arrowRight from "../../images/Slider/Arrow_right.svg";
 import video from '../../video/video-2.mp4';
@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 
 const Slider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [touchPosition, setTouchPosition] = useState<number | null>(null);
   const [hidePadding, setHidePadding] = useState(false);
   const [autoPlay, setAutoPlay] = useState(true);
 
@@ -34,6 +35,31 @@ const Slider = () => {
     return () => clearInterval(slideInterval);
  }, [autoPlay]);
 
+ const handleTouchStart = (event:React.TouchEvent) => {
+  const firstTouch = event.touches[0].clientX;
+
+  setTouchPosition(firstTouch);
+};
+
+const moveTouch = (event:React.TouchEvent) => {
+  if (touchPosition === null) {
+    return;
+  }
+
+  const currentTouch = event.touches[0].clientX;
+  const diff = touchPosition - currentTouch;
+
+  if (diff > 5) {
+    slideRight();
+  }
+
+  if (diff < -5) {
+    slideLeft();
+  }
+
+  setTouchPosition(null);
+};
+
   // useEffect(() => {
   //   const removePaddind = () => {
   //     if (window.scrollY > 0) {
@@ -55,6 +81,8 @@ const Slider = () => {
         className="slider__container"
         onMouseEnter={() => setAutoPlay(false)}
         onMouseLeave={() => setAutoPlay(true)}
+        onTouchStart={event => handleTouchStart(event)}
+        onTouchMove={event => moveTouch(event)}
       >
         <div className="slider__images-container" style={{transform: `translateX(-${currentSlide * 100}%)`}}>
           {images.map((image) => (

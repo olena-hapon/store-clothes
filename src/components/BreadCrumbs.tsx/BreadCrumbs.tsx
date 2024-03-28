@@ -12,19 +12,20 @@ const BreadCrumbs = () => {
     const breadCrunmbs = (item) => {
       if (item === 'woman' || item === 'mans' || item === 'new' || item === 'sales') {
         items.push(item);
+
         if ((item === 'woman' || item === 'mans') && (items.includes('new') || items.includes('sales'))) {
-          console.log('go in 1')
-          
+
           return `./../../../${item}`;
         }
-      } else if (item !== 'woman' && item !== 'mans' || item !== 'new' || item !== 'sales') {
-        return `./../../../${item}`;
-      }
-      console.log('go in 2')
+
+        } else if (item !== 'woman' && item !== 'mans' || item !== 'new' || item !== 'sales') {
+
+          return `./../../../${item}`;
+        }
+
       return `./../../../../${item}`
     }
- 
- console.log(items)
+
   return (
     <div className='breadCrumbs'>
       <span className="breadCrumbs__home">

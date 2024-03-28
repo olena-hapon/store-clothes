@@ -15,8 +15,6 @@ const Sort = () => {
 
   let loc = useLocation().pathname;
 
-  console.log(loc)
-
   const listPrice = [
     { name: "Price descending", sortBy: "discountPrice", order: 'desc' },
     { name: "Price ascending", sortBy: "discountPrice", order: 'asc' }
@@ -48,14 +46,14 @@ const Sort = () => {
   let [colorsList, setColorsList] = useState<string[]>([]);
   let [sizesList, setSizesList] = useState<string[]>([]);
 
-  useEffect(() => {
-    dispatch(deleteColors());
-    console.log(colors)
-    setColorsList([]);
-    dispatch(deleteSizes());
-    setIsChecked(true);
-    dispatch(setSort({name:'', sortBy: 'discountPrice', order: ''}));
-  },[loc])
+  // useEffect(() => {
+  //   dispatch(deleteColors());
+  //   console.log(colors)
+  //   setColorsList([]);
+  //   dispatch(deleteSizes());
+  //   setIsChecked(true);
+  //   dispatch(setSort({name:'', sortBy: 'discountPrice', order: ''}));
+  // },[loc])
 
   //-----setParams----///
   const handleChangePrice = (item, item2) => {
@@ -284,6 +282,7 @@ const Sort = () => {
                         name='sortBy'
                         id={el.name}
                         className='input'
+                        // value={el.sortBy}
                         checked={sort?.order === (el.order) || price?.includes(el.order)}
                         onChange={() => handleChangePrice(el.order, el)}
                       />

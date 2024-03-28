@@ -37,6 +37,14 @@ a {
 
   &__section {
     margin-bottom: 70px;
+
+    &--banner {
+      margin-block-end: 100px;
+
+      @media(max-width: 760px) {
+        margin-block-end: 70px;
+      }
+    }
   }
 }
 

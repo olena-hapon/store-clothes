@@ -8,11 +8,14 @@ import { fetchProducts } from '../../redux/slices/products';
 import Categoories from '../../components/Categories/Categoories';
 import Banner from '../Banner/Banner';
 import { setCategory, setSubCategory, setIsNew, setSales } from '../../redux/slices/filter';
+import BannerPhoto from '../../components/BannerPhoto/BannerPhoto';
+import NewsLetter from '../../components/NewsLetter/NewsLetter';
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const { products } = useAppSelector(state => state.products);
   const { category, subCategory, isNew, isSales, page, sort } = useAppSelector((state) => state.filters);
+  const { searchValue } = useAppSelector(state => state.search);
 
   // const location = useLocation().pathname;
   // const pathName = location.split('/').slice(1);
@@ -33,7 +36,7 @@ const Home = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchProducts({ category,subCategory,isNew, isSales, page, sort }))
+    dispatch(fetchProducts({ category,subCategory,isNew, isSales, page, sort, searchValue }))
    }, [isNew])
 
   return (
@@ -43,7 +46,8 @@ const Home = () => {
       <Categoories />
       <Banner />
       <ProductsSlider products={products} title='recommended' />
-      <Banner />
+      <BannerPhoto/>
+      <NewsLetter />
     </>
   )
 }

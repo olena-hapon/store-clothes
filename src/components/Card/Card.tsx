@@ -9,10 +9,10 @@ import { setCategory, setSubCategory } from '../../redux/slices/filter';
 
 type Props = {
   product: Product;
+  clickInput?: boolean;
 }
 
-const Card:React.FC<Props> = ({ product }) => {
-  console.log(product);
+const Card:React.FC<Props> = ({ product, clickInput }) => {
   const dispatch = useAppDispatch();
 
   const location = useLocation().pathname;
@@ -50,7 +50,7 @@ const Card:React.FC<Props> = ({ product }) => {
         className="card__link"
         onClick={() => onPressSubCat(product)}
       >
-        <div className="card__images ">
+        <div className={!clickInput ? "card__images" : "card__images card__images--300"}>
           <img src={product.images[0]} alt="card" className='card__img card__images--main'/>
           <img src={product.images[1]} alt="card" className="card__img card__images--second" />
           <div className="card__hover">

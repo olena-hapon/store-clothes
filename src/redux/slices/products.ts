@@ -10,6 +10,7 @@ type FetchProducrsAtgs = {
   isNew: boolean | string,
   isSales: number | string,
   page: number,
+  searchValue: string,
   sort : {
     name: string,
     sortBy: string,
@@ -18,9 +19,8 @@ type FetchProducrsAtgs = {
 }
 
  export const fetchProducts = createAsyncThunk('products/fetchProducts', async (params: FetchProducrsAtgs) => {
-  const { category, subCategory, isNew, isSales, page, sort } = params;
-    const response = await axios.get(`https://65968bd96bb4ec36ca02dde0.mockapi.io/products?category=${category}&subCategory=${subCategory}&isNew=${isNew}&sales=${isSales}&sortBy=${sort.sortBy}&order=${sort.order}`);
-    console.log(sort.sortBy, sort.order)
+  const { category, subCategory, isNew, isSales, page, sort, searchValue } = params;
+    const response = await axios.get(`https://65968bd96bb4ec36ca02dde0.mockapi.io/products?category=${category}&subCategory=${subCategory}&isNew=${isNew}&sales=${isSales}&sortBy=${sort.sortBy}&order=${sort.order}&title=${searchValue}`);
     return response.data
   }
 )
@@ -49,7 +49,6 @@ const productsSlice = createSlice({
       builder.addCase(fetchProducts.fulfilled, (state, { payload }) => {
         state.status = 'succes';
         state.products= payload;
-        console.log(state.products)
       });
   
       builder.addCase(fetchProducts.rejected, (state) => {

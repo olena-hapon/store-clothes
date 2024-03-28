@@ -30,6 +30,7 @@ const [clonesCount, setClonesCount ] = useState({head: 0, tail: 0})
 const [transition, setTransition] = useState(TRANSITION_DURATION);
 const [id, setId] = useState('')
 const [ isInFavorite, setIsInFavorite ] = useState(false);
+const [touchPosition, setTouchPosition] = useState<number | null>(null);
 const dispatch = useAppDispatch();
 const { favoritesItem } = useAppSelector(state => state.favorites);
 
@@ -111,6 +112,31 @@ useEffect(() => {
     })
   }
 
+  const handleTouchStart = (event:React.TouchEvent) => {
+    const firstTouch = event.touches[0].clientX;
+  
+    setTouchPosition(firstTouch);
+  };
+  
+  const moveTouch = (event:React.TouchEvent) => {
+    if (touchPosition === null) {
+      return;
+    }
+  
+    const currentTouch = event.touches[0].clientX;
+    const diff = touchPosition - currentTouch;
+  
+    if (diff > 5) {
+      handleRightClick();
+    }
+  
+    if (diff < -5) {
+      handleLeftClick();
+    }
+  
+    setTouchPosition(null);
+  };
+
   return (
     <section className='productsSlider app__section'>
       <div className="productsSlider__wrapper">
@@ -121,6 +147,8 @@ useEffect(() => {
             transitionDuration: `${transition}ms`,
             transform: `translateX(${offset}px)`
           }}
+          onTouchStart={event => handleTouchStart(event)}
+          onTouchMove={event => moveTouch(event)}
         >
           {!!newProducts && (
             newProducts.map((product, index) => (

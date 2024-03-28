@@ -6,13 +6,13 @@ import './ProductsList.scss';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useLocation } from 'react-router-dom';
 import { addToFavorites } from '../../redux/slices/favorites';
+import NoProducts from '../NoProducts/NoProducts';
 
 type Props = {
   products: Product[];
 }
 
 const ProductsList:React.FC<Props> = ({ products }) => {
-  console.log(products)
 const [limits, setLimits] = useState(8);
 const pathName = useLocation().pathname;
 const dispatch = useAppDispatch();
@@ -34,11 +34,11 @@ const { favoritesItem } = useAppSelector(state => state.favorites);
   return (
     <div className="productsList">
       <Sort />
-      <div className="productsList__wrapper">
+      <div className={products.length <= 0 ? "productsList__wrapper--none" : "productsList__wrapper"}>
         {sliceProducts.length > 0 ? (
           sliceProducts.map((prod) => (
-            <div className="productsList__card">
-              <Card product={prod} key={prod.id}/>
+            <div className="productsList__card" key={prod.id}>
+              <Card product={prod} />
               <div
                 className="favorites"
                 onClick={() => dispatch(addToFavorites(prod))}
@@ -55,17 +55,23 @@ const { favoritesItem } = useAppSelector(state => state.favorites);
               </div>
             </div>
             ))) 
-              : 'no products'
+              : (
+                <NoProducts />
+              )
         }
       </div>
 
-      <button
-        className='productsList__button'
-        onClick={() => loadMore()}
-        disabled={limits > sliceProducts.length}
-      >
-        {(products.length) > limits ? 'Show more' : 'all products'}
-        </button>
+      {
+        products.length > 0 && (
+          <button
+            className='productsList__button'
+            onClick={() => loadMore()}
+            disabled={limits > sliceProducts.length}
+          >
+            {(products.length) > limits ? 'Show more' : 'all products'}
+          </button>
+        )
+      }
     </div>
   )
 }
